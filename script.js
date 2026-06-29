@@ -4,7 +4,7 @@ const i18n = {
         to: '✦ Trân trọng kính mời ✦',
         hero_title: 'Lễ Tốt Nghiệp',
         hero_body: 'Sự hiện diện của bạn là niềm vinh hạnh lớn đối với tôi trong cột mốc ý nghĩa này.',
-        from: 'TÂN THẠC SĨ',
+        from: 'Tân Thạc Sĩ',
         date_label: 'Ngày tổ chức',
         time_label: 'Vào lúc',
         calendar_month: 'Tháng 07 · 2026',
@@ -29,7 +29,7 @@ const i18n = {
         to: '✦ Cordially Invites You ✦',
         hero_title: 'Graduation Ceremony',
         hero_body: 'Your presence would be a great honor for me at this meaningful milestone.',
-        from: 'Of Bachelor',
+        from: 'Master of Science',
         date_label: 'Date',
         time_label: 'Time',
         calendar_month: 'July · 2026',
@@ -53,8 +53,8 @@ const i18n = {
         choose_lang: 'Choisir la langue · Chọn ngôn ngữ',
         to: '✦ Vous Invite Cordonnément ✦',
         hero_title: 'Cérémonie de Remise des Diplômes',
-        hero_body: 'Votre présence serait un grand honneur pour moi à ce jalons significatif.',
-        from: 'De bachelière',
+        hero_body: 'Votre présence serait un grand honreur pour moi à ce jalons significatif.',
+        from: 'De Maîtrise',
         date_label: 'Date',
         time_label: 'Heure',
         calendar_month: 'Juillet · 2026',
@@ -76,8 +76,18 @@ const i18n = {
     }
 };
 
+let supabaseClient;
+const supabaseLib = window.supabase?.supabase || window.supabase;
+
+if (supabaseLib && typeof supabaseLib.createClient === 'function') {
+    supabaseClient = supabaseLib.createClient(
+        "https://oqrufsujswrgeakypigp.supabase.co",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9xcnVmc3Vqc3dyZ2Vha3lwaWdwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MjcyMTEwOSwiZXhwIjoyMDk4Mjk3MTA5fQ.hvvhRo3P_wTn3rA7GziBci0R20pIvcv37f-wHWypYfs"
+    );
+}
+
 let lang = 'vi';
-let wishes = JSON.parse(localStorage.getItem('card_wishes') || '[]');
+let wishes = [];
 const sections = document.querySelectorAll('.section');
 const dots = document.querySelectorAll('.dot');
 
@@ -217,6 +227,21 @@ function escHtml(s) {
     return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+async function fetchWishes() {
+    if (!supabaseClient) {
+        return;
+    }
+    const { data, error } = await supabaseClient
+        .from('wishes')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    if (!error && data) {
+        wishes = data;
+        renderWishes();
+    }
+}
+
 function renderWishes() {
     const list = document.getElementById('wishes-list');
     if (!list) {
@@ -227,44 +252,69 @@ function renderWishes() {
         list.innerHTML = `<p class="empty-wishes">${t.empty_wishes}</p>`;
         return;
     }
-    list.innerHTML = [...wishes].reverse().map(w => `
-        <div class="wish-card">
-            <div class="wish-header">
-                <span class="wish-name">${escHtml(w.name || '')}</span>
-                <span class="wish-time">${new Date(w.ts).toLocaleDateString()}</span>
+    list.innerHTML = wishes.map(w => {
+        const dateVal = w.created_at ? new Date(w.created_at).toLocaleDateString('en-GB') : '';
+        const relationStr = w.relationship ? ` (${w.relationship})` : '';
+        return `
+            <div class="wish-card">
+                <div class="wish-header">
+                    <span class="wish-name">${escHtml(w.name || '')}<small style="opacity:0.7; font-weight:normal;">${escHtml(relationStr)}</small></span>
+                    <span class="wish-time">${dateVal}</span>
+                </div>
+                <p class="wish-text">${escHtml(w.message || '')}</p>
             </div>
-            <p class="wish-text">${escHtml(w.msg || '')}</p>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 const submitBtn = document.getElementById('submit-wish');
 if (submitBtn) {
-    submitBtn.addEventListener('click', () => {
+    submitBtn.addEventListener('click', async () => {
         const nameEl = document.getElementById('wish-name');
         const msgEl = document.getElementById('wish-msg');
-        
+        const relaEl = document.getElementById('wish-relation');
         if (!nameEl || !msgEl) {
             return;
         }
 
         const name = nameEl.value.trim();
         const msg = msgEl.value.trim();
+        const relation = relaEl ? relaEl.value.trim() : '';
         const t = i18n[lang];
         
         if (!name || !msg) {
             showToast(t.toast_err);
             return;
         }
+
+        if (!supabaseClient) {
+            showToast("Hệ thống chưa sẵn sàng, vui lòng thử lại sau.");
+            return;
+        }
         
-        wishes.push({ name, msg, ts: Date.now() });
-        localStorage.setItem('card_wishes', JSON.stringify(wishes));
+        const { error } = await supabaseClient
+            .from("wishes")
+            .insert([
+                {
+                    name: name,
+                    message: msg,
+                    relationship: relation
+                }
+            ]);
+
+        if (error) {
+            showToast(error.message);
+            return;
+        }
         
         nameEl.value = '';
         msgEl.value = '';
+        if (relaEl) {
+            relaEl.value = '';
+        }
         
         showToast(t.toast_ok);
-        renderWishes();
+        await fetchWishes();
     });
 }
 
@@ -291,4 +341,6 @@ function updateCountdown() {
 const countdownInterval = setInterval(updateCountdown, 1000);
 updateCountdown();
 
-renderWishes();
+// Khởi tạo app chạy mặc định bằng Tiếng Việt
+applyLang('vi');
+fetchWishes();
