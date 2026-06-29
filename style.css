@@ -688,22 +688,25 @@ body {
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
+    gap: 1.5rem; /* Reduced from 2.5rem to save vertical space */
+    max-height: 90vh; /* Limits content within the viewport height */
+    justify-content: center;
 }
 
 .wish-form {
     background: var(--surface);
     border-radius: 16px;
-    padding: 3rem 2.5rem;
+    padding: 1.5rem 2.5rem; /* Reduced vertical padding from 3rem */
     box-shadow: var(--shadow-lg);
     border: var(--border-premium);
+    flex-shrink: 0; /* Prevents the form from collapsing */
 }
 
 .form-title {
     font-family: var(--font-display);
-    font-size: 1.6rem;
+    font-size: 1.4rem; /* Slightly reduced from 1.6rem */
     font-weight: 500;
-    margin-bottom: 2rem;
+    margin-bottom: 1.25rem; /* Reduced from 2rem */
     text-align: center;
     color: var(--ink);
     letter-spacing: 0.02em;
@@ -738,7 +741,7 @@ body {
     color: var(--ink);
     font-family: var(--font-body);
     font-size: 0.9rem;
-    padding: 0.85rem 1.1rem;
+    padding: 0.75rem 1.1rem; /* Slightly reduced vertical padding */
     outline: none;
     resize: none;
     transition: all 0.3s var(--ease-out);
@@ -751,8 +754,8 @@ body {
 }
 
 .submit-btn {
-    margin-top: 1.75rem;
-    padding: 0.85rem 2.75rem;
+    margin-top: 1rem; /* Reduced from 1.75rem */
+    padding: 0.75rem 2.5rem; /* Slightly reduced padding */
     border: none;
     border-radius: 30px;
     background: var(--ink);
@@ -786,7 +789,8 @@ body {
 }
 
 .wishes-container {
-    max-height: 280px;
+    flex-grow: 1; /* Allows container to fill available space dynamically */
+    max-height: 250px; /* Reduced to leave safe layout room on standard screens */
     overflow-y: auto;
     padding-right: 0.75rem;
 }
@@ -810,7 +814,7 @@ body {
     background: var(--surface);
     border: 1px solid rgba(197, 160, 89, 0.15);
     border-radius: 12px;
-    padding: 1.25rem 1.5rem;
+    padding: 1rem 1.25rem; /* Slightly reduced padding */
     box-shadow: var(--shadow-sm);
     transition: transform 0.3s var(--ease-out);
 }
@@ -824,7 +828,7 @@ body {
     justify-content: space-between;
     font-size: 0.8rem;
     color: var(--ink-muted);
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.4rem; /* Reduced from 0.6rem */
 }
 
 .wish-name {
@@ -834,7 +838,7 @@ body {
 
 .wish-text {
     font-size: 0.9rem;
-    line-height: 1.5;
+    line-height: 1.4; /* Slightly reduced line-height */
     color: var(--ink-muted);
 }
 
