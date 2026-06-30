@@ -172,7 +172,7 @@ function initGradCapAnimation() {
                 }, 4000);
             }, i * 150);
         }
-    }, 8000);
+    }, 10000);
 }
 
 function initAudioControls() {
@@ -329,15 +329,32 @@ function createPetals(containerId, count = 12) {
 }
 createPetals('petals', 14);
 
-function showToast(msg) {
-    const t = document.getElementById('toast');
-    if (t) {
-        t.textContent = msg;
-        t.classList.add('show');
-        setTimeout(() => {
-            t.classList.remove('show');
-        }, 3000);
+function showToast(message, type = 'success') {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
     }
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <span class="toast-icon">${type === 'success' ? '✔' : '✕'}</span>
+        <span class="toast-text">${message}</span>
+    `;
+
+    container.appendChild(toast);
+
+    // Kích hoạt animation tắt sau 3 giây
+    setTimeout(() => {
+        toast.classList.add('fade-out');
+        
+        // Cứu cánh bằng setTimeout (an toàn tuyệt đối nếu CSS transition bị lỗi)
+        setTimeout(() => {
+            toast.remove();
+        }, 300); 
+    }, 3000);
 }
 
 function escHtml(s) {
