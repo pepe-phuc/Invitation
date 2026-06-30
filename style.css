@@ -5,6 +5,127 @@
     margin: 0;
     padding: 0;
 }
+/* Fullscreen Loader Overlay */
+.fullscreen-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(250, 248, 245, 0.85); /* Tông màu cream dịu nhẹ, làm mờ background sau */
+    z-index: 9999; /* Đảm bảo luôn nằm trên cùng mọi phần tử */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px); /* Làm nhòe nhẹ background chuẩn modern UI */
+}
+
+.loader-content {
+    text-align: center;
+}
+
+/* Luxury Premium Spinner */
+.premium-spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid rgba(197, 160, 89, 0.15);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: globalSpin 1s cubic-bezier(0.5, 0.1, 0.4, 0.9) infinite;
+    margin: 0 auto 1rem;
+}
+
+.loader-text {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--gold-dark);
+    letter-spacing: 0.05em;
+}
+
+@keyframes globalSpin {
+    to { transform: rotate(360deg); }
+}
+
+.list-loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.6); /* Phủ mờ nhẹ vùng list */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+}
+
+
+.list-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(197, 160, 89, 0.15);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: listSpin 0.8s linear infinite;
+}
+
+@keyframes listSpin {
+    to { transform: rotate(360deg); }
+}
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #ffffff;
+    border-left: 4px solid var(--gold);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 12px 20px;
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--ink);
+    animation: toastIn 0.3s ease forwards;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast.error {
+    border-left-color: #d9534f;
+}
+
+.toast-icon {
+    font-weight: bold;
+    color: var(--gold);
+}
+
+.toast.error .toast-icon {
+    color: #d9534f;
+}
+
+.toast.fade-out {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
     display: none;
@@ -488,7 +609,7 @@ input, textarea, button {
 
 .portrait-frame {
     width: 100%;
-    max-width: 400px;
+    max-width: 1000px;
     aspect-ratio: 4 / 5;
     border-radius: 200px 200px 0 0;
     overflow: hidden;
@@ -688,6 +809,9 @@ input, textarea, button {
 }
 
 @media (max-width: 768px) {
+    .welcome-names{ 
+        font-size: 3.5rem;
+    }
     .countdown-celebrate-title {
         margin: 1rem 0 2.5rem 0;
     }
@@ -711,79 +835,346 @@ input, textarea, button {
 }
 
 .gallery-item {
+   position: relative;
+    width: 100%;
     aspect-ratio: 1 / 1;
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    background: var(--surface);
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid rgba(197, 160, 89, 0.1);
+    transition: transform 0.3s var(--ease-out);
 }
 
 .gallery-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
+    display: block;
 }
 
-/* Section 6: Lưu Bút */
+.gallery-item:hover {
+    transform: scale(1.02);
+}
+/* Lightbox Modal nền tối sang trọng */
+.lightbox-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(26, 25, 24, 0.95); /* Tông tối trầm hợp với luxury theme */
+    z-index: 10001; /* Nằm trên cả loader và toast */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.lightbox-modal.show {
+    opacity: 1;
+}
+
+/* Ảnh hiển thị nguyên gốc, không bị mất góc */
+.lightbox-content {
+    max-width: 90%;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+.lightbox-modal.show .lightbox-content {
+    transform: scale(1);
+}
+
+/* Nút đóng */
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #FAF8F5;
+    font-size: 2.5rem;
+    font-weight: 300;
+    cursor: pointer;
+    transition: color 0.3s;
+    user-select: none;
+}
+
+.lightbox-close:hover {
+    color: var(--gold);
+}
+
+@media (max-width: 768px) {
+    .lightbox-close {
+        top: 15px;
+        right: 20px;
+        font-size: 2rem;
+    }
+}
+/* Section 6: Guestbook Form & List Modernization */
 .s6-content-modern {
     position: relative;
     z-index: 2;
-    max-width: 550px;
+    max-width: 620px;
     width: 100%;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-height: 90vh;
+    justify-content: center;
 }
 
 .wish-form {
     background: var(--surface);
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 2rem;
     box-shadow: var(--shadow-md);
     border: var(--border-premium);
+    flex-shrink: 0;
+}
+
+.form-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: var(--ink);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
 }
 
 .form-row {
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
-    gap: 12px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
 }
 
 .field input, .field textarea {
     width: 100%;
-    background: #FAF8F5;
-    border: 1px solid #EAE5DC;
-    border-radius: 4px;
+    background: var(--cream);
+    border: 1px solid rgba(197, 160, 89, 0.25);
+    border-radius: 8px;
     color: var(--ink);
-    font-size: 0.85rem;
-    padding: 12px 16px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    padding: 0.8rem 1.1rem;
     outline: none;
     resize: none;
+    transition: all 0.3s var(--ease-out);
 }
 
-.submit-btn {
-    width: 100%;
-    margin-top: 12px;
-    padding: 12px;
-    border: none;
-    border-radius: 4px;
-    background: var(--gold-dark);
-    color: var(--surface);
-    font-size: 0.85rem;
+.field input:focus, .field textarea:focus {
+    background: var(--surface);
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.1);
+}
+
+/* Attendance Section Styling */
+.attendance-label {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--ink);
+    margin-bottom: 0.6rem;
+    text-align: left;
     font-weight: 500;
+}
+
+.attendance-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    width: 100%;
+}
+
+.attendance-card {
     cursor: pointer;
-    transition: background 0.3s ease;
+    position: relative;
+    width: 100%;
 }
 
-.submit-btn:hover {
-    background: var(--gold);
+.attendance-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
-.form-status-msg {
-    margin-top: 1.5rem;
-    font-size: 0.85rem;
-    color: var(--ink-muted);
+.card-box {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 0.5rem;
+    background: var(--cream);
+    border: 1px solid rgba(197, 160, 89, 0.25);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    transition: all 0.3s var(--ease-out);
+    text-align: center;
+    min-height: 42px;
+}
+
+.radio-icon {
+    font-size: 0.8rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* Radio Checked State */
+.attendance-card input[type="radio"]:checked + .card-box {
+    background: var(--gold-light);
+    border-color: var(--gold);
+    color: var(--gold-dark);
+    font-weight: 500;
+}
+
+
+.submit-btn {
+    margin-top: 1rem;
+    padding: 0.75rem 2.5rem;
+    border: none;
+    border-radius: 30px;
+    background: var(--gold);
+    color: var(--surface);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    display: block;
+    margin-left: auto;
+    transition: all 0.3s var(--ease-out);
+    box-shadow: var(--shadow-sm);
+}
+
+.submit-btn:hover {
+    background: var(--gold-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Wishes List Scroll Area */
+.wishes-container {
+    flex-grow: 1;
+    max-height: 280px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.wishes-container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.wishes-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.wishes-container::-webkit-scrollbar-thumb {
+    background: var(--gold-light);
+    border-radius: 10px;
+}
+
+.wishes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Wish Card Styling */
+.wish-card {
+    background: var(--surface);
+    border: 1px solid rgba(197, 160, 89, 0.15);
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s var(--ease-out);
+    text-align: left;
+}
+
+.wish-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(197, 160, 89, 0.4);
+}
+
+.wish-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.6rem;
+    border-bottom: 1px dashed rgba(197, 160, 89, 0.15);
+    padding-bottom: 0.5rem;
+}
+
+.wish-name {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.wish-name small {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: var(--gold-dark);
+    margin-left: 0.5rem;
+}
+
+.wish-time {
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+}
+
+.wish-text {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--ink-muted);
+    word-break: break-word;
+}
+
+.empty-wishes {
+    color: var(--ink-muted);
+    font-style: italic;
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.9rem;
+}
+
+/* Responsive optimization */
+@media (max-width: 768px) {
+    .s6-content-modern {
+        max-height: 85vh;
+        gap: 1rem;
+    }
+    .wish-form {
+        padding: 1.25rem;
+    }
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+    .attendance-options {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    .wishes-container {
+        max-height: 220px;
+    }
+    .wish-card {
+        padding: 1rem;
+    }
 }
 
 /* Section 7: Quote & Footer */
@@ -908,7 +1299,7 @@ input, textarea, button {
         order: 1;
     }
     .portrait-frame {
-        max-width: 220px;
+        max-width: 300px;
     }
     .gallery-grid {
         grid-template-columns: repeat(2, 1fr);

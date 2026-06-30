@@ -10,6 +10,12 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="global-loader" class="fullscreen-loader" style="display: none;">
+        <div class="loader-content">
+            <div class="premium-spinner"></div>
+            <p class="loader-text" data-i18n="loading_text">Đang tải dữ liệu...</p>
+        </div>
+    </div>
     <div id="welcome-screen">
         <div class="welcome-wing left-wing"></div>
         <div class="welcome-wing right-wing"></div>
@@ -52,20 +58,15 @@
         <div class="bg-cover"></div>
         <div class="s0-content-modern reveal visible">
             <div class="graduation-icon">🎓</div>
-            <h2 class="section-title-modern lang-title">CHÀO MỪNG ĐẾN VỚI</h2>
-            <h1 class="main-card-title">Thiệp Tốt Nghiệp</h1>
-            <p class="lang-subtitle">Cùng chung vui với tôi trong cột mốc đáng nhớ này!</p>
+            <h2 class="section-title-modern lang-title" data-i18n="card_welcome"></h2>
+            <h1 class="main-card-title" data-i18n="card_title"></h1>
+            <p class="lang-subtitle" data-i18n="card_sub_title"></p>
             <div class="lang-box">
                 <p class="lang-box-label" data-i18n="choose_lang"></p>
                 <div class="lang-group">
                     <button class="lang-btn" data-lang="vi">
                         <img src="/assets/image/vi.png" alt="Vietnamese" class="flag" >
                         <span data-i18n="lang_vi"></span>
-                    </button>
-
-                    <button class="lang-btn" data-lang="en">
-                        <img src="/assets/image/en.png" alt="English" class="flag" >
-                        <span data-i18n="lang_en"></span>
                     </button>
 
                     <button class="lang-btn" data-lang="fr">
@@ -105,7 +106,7 @@
             
             <div class="hero-portrait">
                 <div class="portrait-frame">
-                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=600" alt="Lâm Cẩm Thu" class="portrait-img">
+                    <img src="https://lh3.googleusercontent.com/pw/AP1GczPArpapbw6qKZ9Anm7i_S5haI31NrrlH2qYoANoqlzsICgndD9U8ru4TS2yDCF_5pGvstlHFv4u2ryL92mYrcDFckojPMX53aajxIpwI8WbwUFgthkDR5Z1JbzCj7m8_bSIuQrjVUgkkOb3jnNH91KT=w753-h1053-s-no-gm?authuser=0" alt="Lâm Cẩm Thu" class="portrait-img">
                 </div>
             </div>
         </div>
@@ -129,7 +130,13 @@
                 <div class="calendar-widget">
                     <div class="calendar-month" id="calendar-month-val" data-i18n="calendar_month"></div>
                     <div class="calendar-days-header">
-                        <div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div>T7</div><div>CN</div>
+                        <div data-i18n="day_t2">T2</div>
+                        <div data-i18n="day_t3">T3</div>
+                        <div data-i18n="day_t4">T4</div>
+                        <div data-i18n="day_t5">T5</div>
+                        <div data-i18n="day_t6">T6</div>
+                        <div data-i18n="day_t7">T7</div>
+                        <div data-i18n="day_cn">CN</div>
                     </div>
                     <div class="calendar-cells">
                         <div class="empty"></div><div class="empty"></div><div>1</div><div>2</div><div>3</div><div>4</div>
@@ -183,12 +190,13 @@
         <div class="s5-content-modern reveal">
             <h2 class="section-global-title" data-i18n="gallery_title">✦ KHOẢNH KHẮC THANH XUÂN ✦</h2>
             <div class="gallery-grid">
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=500" alt="Youth 1"></div>
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1525921429624-479b6c294521?q=80&w=500" alt="Youth 2"></div>
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1535982330050-f1c2fb79ff78?q=80&w=500" alt="Youth 3"></div>
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?q=80&w=500" alt="Youth 4"></div>
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?q=80&w=500" alt="Youth 5"></div>
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=500" alt="Youth 6"></div>
+                
+                <div class="gallery-item"><img src="https://lh3.googleusercontent.com/pw/AP1GczM7gugPKYVsgtaDBPepHmLn9YzNxsMXVvcZgcSeSujCBMEls5i_tdy73YOM2Vch56KeLr6GDtE5STE4X_jlAhVFLbLxXMgGWpItx8jZzKmqVXrQEqV6upvI78_eIjFZMfewr_VkGoxm_vP2mT7tlC8p=w702-h1053-s-no-gm?authuser=0" alt="Youth 1"></div>
+                <div class="gallery-item"><img src="https://lh3.googleusercontent.com/pw/AP1GczORsjUrMYmNWbkcLqTT3NqaxJlUn-jnc-1p2HceFMMik3Np3kx7LO915PSuWIJmQiUG1qZSOK9-wXioHxeLmkfJoa8tlhkkPtjvSd16PIYqyOiAV9Y5sO0V_Z3xSGVFdpN4Y3RqFrMTkczDLuJ7y99A=w702-h1053-s-no-gm?authuser=0" alt="Youth 2"></div>
+                <div class="gallery-item"><img src="https://lh3.googleusercontent.com/pw/AP1GczPmTPEuXr20cS0C0d5aNAtB_gMpw9xK1dcjlGpzKPWE2xTnHnJ6xxdiAjd0D3Mb6y3JV2qdr0hGnGa9zuYXz3Qb3MOubxY1-JE4CDrqLVvv2rQWCovVbKkwpV2vVsL66tM4HqsX3fStJLgNh7HcgaK8=w1876-h1053-s-no-gm?authuser=0" alt="Youth 3"></div>
+                <div class="gallery-item"><img src="https://lh3.googleusercontent.com/pw/AP1GczML-gc39QomkYYJgefm2N2pZPmmIiyWriU33dU4aeG76BmDCJboIdoezv7ZQqYQGzJeLoHm1-EcRXbEPYYUZ3laSGJ5K1H1hMSe-n3jtjYgDJMH4xsNeCUPTj4XUzF_6epSRYUx4Th0XwdZX5zdCxmC=w1580-h1053-s-no-gm?authuser=0" alt="Youth 4"></div>
+                <div class="gallery-item"><img src="https://lh3.googleusercontent.com/pw/AP1GczP75uuZMNKCcD7TqaB-i_IE3Xb8MgXfpUbcYOr-9ct7rPmF12iNR-r7id69jugTxrRnrQqVdYF5mt3JQS1-Gl3cEZ4OCIMwCedV-tjj7Yzy9ws7J6JfVDAglGeXa1uhRVofxxoB4phoA8FFvArylziy=w1568-h1053-s-no-gm?authuser=0" alt="Youth 5"></div>
+                <div class="gallery-item"><img src="https://lh3.googleusercontent.com/pw/AP1GczPonkl1QTLyanEz1C3zKf9oj_1abfRwXr_9Q-T-mnDY6MiFqCEv7ttRh5MlgL7BMmDICaAiXnd2FPwgBzu1NOb5Dsjgzz7vO4PxjEuAyEjVCtNJsddhhmHDtEn-NdT-6zQ1r2CNvimB0p43qhezXVq3=w1870-h1053-s-no-gm?authuser=0" alt="Youth 6"></div>
             </div>
         </div>
     </section>
@@ -206,7 +214,31 @@
                         <input type="text" id="wish-relation" data-i18n-placeholder="relation_ph">
                     </div>
                 </div>
-                <div class="field" style="margin-top:1rem">
+                
+                <div class="form-row" style="margin-top: 1.2rem;">
+                    <div class="field full-width">
+                        <label class="attendance-label" data-i18n="attendance_question"></label>
+                        
+                        <div class="attendance-options">
+                            <label class="attendance-card">
+                                <input type="radio" name="attendance" value="yes" checked>
+                                <div class="card-box">
+                                    <span class="radio-icon">✔</span>
+                                    <span data-i18n="attendance_yes"></span>
+                                </div>
+                            </label>
+                            <label class="attendance-card">
+                                <input type="radio" name="attendance" value="no">
+                                <div class="card-box">
+                                    <span class="radio-icon">✖</span>
+                                    <span data-i18n="attendance_no"></span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field" style="margin-top: 1.2rem;">
                     <textarea id="wish-msg" rows="4" data-i18n-placeholder="msg_ph"></textarea>
                 </div>
                 <button class="submit-btn" id="submit-wish" data-i18n="submit_btn"></button>
@@ -214,6 +246,13 @@
                     <span class="status-icon">⭐</span>
                     <span data-i18n="wish_success"></span>
                 </div>
+            </div>
+
+            <div class="wishes-container reveal" style="margin-top: 2rem;">
+                <div id="list-loader" class="list-loader" style="display: none;">
+                    <div class="list-spinner"></div>
+                </div>
+                <div class="wishes-list" id="wishes-list"></div>
             </div>
         </div>
     </section>
@@ -234,7 +273,10 @@
             </footer>
         </div>
     </section>
-
+    <div id="gallery-lightbox" class="lightbox-modal" style="display: none;">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img" src="" alt="Full View">
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="script.js"></script>
 </body>
