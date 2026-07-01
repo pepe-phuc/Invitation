@@ -4,7 +4,6 @@ const i18n = {
         lang_vi: 'Tiếng Việt',
         lang_en: 'Tiếng Anh',
         lang_fr: 'Tiếng Pháp',
-        card_welcome:'CHÀO MỪNG ĐẾN VỚI',
         card_title:'THƯ MỜI TỐT NGHIỆP',
         card_sub_title:'Sự hiện diện của mọi người là niềm hạnh phúc lớn nhất trong ngày đặc biệt này.',
         to: ' Trân trọng kính mời ',
@@ -25,6 +24,7 @@ const i18n = {
         lbl_days: 'NGÀY',
         lbl_hours: 'GIỜ',
         lbl_minutes: 'PHÚT',
+        lbl_seconds: 'GIÂY',
         wishes_label: ' Thư Viện ',
         gallery_title: ' KHOẢNH KHẮC THANH XUÂN ',
         gallery_alt_1: 'Ảnh kỷ niệm 1',
@@ -46,7 +46,7 @@ const i18n = {
         toast_err: 'Vui lòng điền đầy đủ thông tin',
         thank_p1: 'Hôm nay là kết thúc của một chặng đường, nhưng cũng là khởi đầu cho một hành trình mới. Chặng đường vừa qua sẽ không trọn vẹn nếu thiếu đi sự đồng hành và ủng hộ của tất cả mọi người.',
         thank_p2: 'Vì vậy, Cẩm Thu rất mong được gặp những người yêu thương để cùng đánh dấu cột mốc đặc biệt này nhé !',
-        thank_sign: 'Save the date & See you there! 🎓✨',
+        thank_sign: 'Save the date <span class="nobreak">& See you there! 🎓✨</span>',
         scroll: 'CUỘN',
         portrait_alt: 'Ảnh chân dung',
         footer_title: 'CẢM ƠN BẠN ĐÃ ĐỒNG HÀNH CÙNG TÔI!',
@@ -64,7 +64,6 @@ const i18n = {
         lang_vi: 'Vietnamien',
         lang_en: 'Anglais',
         lang_fr: 'Français',
-        card_welcome:'Bienvenue',
         card_title: 'INVITATION CORDIALE À TOUS!',
         card_sub_title: 'Votre présence embellit ce moment. Merci du fond du cœur !',
         to: ' Vous êtes cordialement invité ',
@@ -73,7 +72,7 @@ const i18n = {
         hero_class: 'Master',
         hero_role: "Didactique du FLE",
         label_school_name: "Université de Pédagogie de Hô Chi Minh-Ville",
-        label_school_address: '280 rue An Duong Vuong, Quartier Chợ Quán, HCMV',
+        label_school_address: '280 rue An Dương Vương, Quartier Chợ Quán, HCMV',
         label_information: " INFORMATION DE L'ÉVÉNEMENT ",
         date_label: 'DATE',
         time_label: 'HEURE',
@@ -85,6 +84,7 @@ const i18n = {
         lbl_days: 'JOURS',
         lbl_hours: 'HEURES',
         lbl_minutes: 'MIN',
+        lbl_seconds: 'SEC',
         wishes_label: ' Galerie ',
         gallery_title: ' ÉCLATS DE JEUNESSE ',
         gallery_alt_1: 'Photo souvenir 1',
@@ -106,7 +106,7 @@ const i18n = {
         toast_err: 'Veuillez remplir tous les champs.',
         thank_p1: "Aujourd’hui marque la fin d’un chapitre, mais aussi le début d’une nouvelle aventure. Ce chemin parcouru n’aurait pas été parfait sans la présence et le soutien de vous tous.",
         thank_p2: "Ainsi, j'ai tellement hâte de retrouver ceux que j'aime pour célébrer ensemble ce joyeux chapitre.",
-        thank_sign: 'Réservez la date & Au plaisir de vous y voir ! 🎓✨',
+        thank_sign: 'Réservez la date <span class="nobreak">& Au plaisir de vous y voir ! 🎓✨</span>',
         scroll: 'DÉFILER',
         portrait_alt: 'Portrait',
         footer_title: "MERCI DE M'AVOIR ACCOMPAGNÉ DANS CE PARCOURS !",
@@ -512,20 +512,27 @@ function initCountdown() {
     const dEl = document.getElementById('days');
     const hEl = document.getElementById('hours');
     const mEl = document.getElementById('minutes');
+    const sEl = document.getElementById('seconds');
 
     const updateCountdown = () => {
         const diff = targetDate - Date.now();
         if (diff <= 0) {
             clearInterval(countdownInterval);
+            if (dEl) { dEl.textContent = '00'; }
+            if (hEl) { hEl.textContent = '00'; }
+            if (mEl) { mEl.textContent = '00'; }
+            if (sEl) { sEl.textContent = '00'; }
             return;
         }
         const d = Math.floor(diff / (1000 * 60 * 60 * 24));
         const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
 
         if (dEl) { dEl.textContent = String(d).padStart(2, '0'); }
         if (hEl) { hEl.textContent = String(h).padStart(2, '0'); }
         if (mEl) { mEl.textContent = String(m).padStart(2, '0'); }
+        if (sEl) { sEl.textContent = String(s).padStart(2, '0'); }
     };
     const countdownInterval = setInterval(updateCountdown, 1000);
     updateCountdown();
